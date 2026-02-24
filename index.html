@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Контакт онлайн-бухгалтера (налоги в США)</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GBYJQDFHMR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-GBYJQDFHMR');
+  </script>
+
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: 560px;
+      margin: 48px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0 0 16px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    a.button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    a.button.primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    a.button:hover {
+      filter: brightness(0.97);
+    }
+
+    footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <div class="card">
+      <div class="badge">Андрей Ивченко</div>
+
+      <h1>Cпециалист по налогам в США</h1>
+
+      <ul>
+        <li>работает по всем штатам онлайн </li>
+        <li>Опыт с W-2, 1099, LLC, S-Corp</li>
+        <li>на связи с 10 am до 10 pm</li>
+        <li>Стоимость зависит от сложности кейса</li>
+      </ul>
+
+      <div class="buttons">
+        <!-- ===== Telegram =====
+          1) Замени USERNAME
+          2) Текст уже префиллен и виден бухгалтеру
+          3) GA4 событие: click_telegram
+        -->
+        <a href="https://t.me/aitaxusa?text=Здравствуйте%21%20Можно%20узнать%20подробнее%20о%20подаче%20налогов%3F%0AКонтакт%20от%20Portland%20Events."
+          class="button primary"
+          data-event="click_telegram"
+          data-dest="telegram"
+          rel="noopener"
+          onclick="trackAndGo(event)">
+          Написать в Telegram
+        </a>
+
+        <!-- ===== Phone =====
+          Формат: +1XXXXXXXXXX
+          GA4 событие: click_call
+        -->
+        <a href="tel:+13236166855"
+          class="button"
+          data-event="click_call"
+          data-dest="phone"
+          onclick="trackAndGo(event)">
+          Позвонить
+        </a>
+
+        <!-- ===== SMS =====
+          GA4 событие: click_sms
+        -->
+        <a href="sms:+13236166855"
+          class="button"
+          data-event="click_sms"
+          data-dest="sms"
+          onclick="trackAndGo(event)">
+          Написать SMS
+        </a>
+      </div>
+
+      <footer>
+        Напишите, что вы от Portland Events. Контакт предоставлен в справочных целях.
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    // Отправляем событие, потом открываем ссылку.
+    // Для tel/sms браузер может сразу прыгнуть в приложение — поэтому делаем мягко.
+    function trackAndGo(e) {
+      const el = e.currentTarget;
+      const eventName = el.getAttribute('data-event');
+      const href = el.getAttribute('href');
+
+      // Если GA4 не подключён — просто идём по ссылке
+      if (typeof gtag !== 'function') return;
+
+      // Для внешних переходов полезно передать destination
+      gtag('event', eventName, {
+        destination: el.getAttribute('data-dest') || '',
+        link_url: href
+      });
+
+      // Для обычных ссылок можно задержать переход на долю секунды,
+      // чтобы событие успело улететь.
+      // Для tel/sms задержка иногда мешает — поэтому задерживаем только Telegram/https.
+      if (href.startsWith('http')) {
+        e.preventDefault();
+        setTimeout(() => { window.location.href = href; }, 120);
+      }
+    }
+  </script>
+</body>
+</html>
