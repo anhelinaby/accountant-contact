@@ -135,12 +135,13 @@
           3) GA4 событие: click_telegram
         -->
         <a href="https://t.me/aitaxusa?text=Здравствуйте%21%20Можно%20узнать%20подробнее%20о%20подаче%20налогов%3F%0AКонтакт%20от%20Portland%20Events."
-          class="button primary"
-          data-event="click_telegram"
-          data-dest="telegram"
-          rel="noopener"
-          onclick="trackAndGo(event)">
-          Написать в Telegram
+        class="button primary"
+        data-event="click_telegram"
+        data-dest="telegram"
+        target="_blank"
+        rel="noopener"
+        onclick="trackAndGo(event)">
+        Написать в Telegram
         </a>
 
         <!-- ===== Phone =====
@@ -173,31 +174,20 @@
     </div>
   </main>
 
-  <script>
-    // Отправляем событие, потом открываем ссылку.
-    // Для tel/sms браузер может сразу прыгнуть в приложение — поэтому делаем мягко.
+    <script>
     function trackAndGo(e) {
-      const el = e.currentTarget;
-      const eventName = el.getAttribute('data-event');
-      const href = el.getAttribute('href');
+        const el = e.currentTarget;
+        const eventName = el.dataset.event;
+        const href = el.getAttribute('href');
 
-      // Если GA4 не подключён — просто идём по ссылке
-      if (typeof gtag !== 'function') return;
-
-      // Для внешних переходов полезно передать destination
-      gtag('event', eventName, {
-        destination: el.getAttribute('data-dest') || '',
-        link_url: href
-      });
-
-      // Для обычных ссылок можно задержать переход на долю секунды,
-      // чтобы событие успело улететь.
-      // Для tel/sms задержка иногда мешает — поэтому задерживаем только Telegram/https.
-      if (href.startsWith('http')) {
-        e.preventDefault();
-        setTimeout(() => { window.location.href = href; }, 120);
-      }
+        if (typeof gtag === 'function') {
+        gtag('event', eventName, {
+            destination: el.dataset.dest,
+            link_url: href,
+            transport_type: 'beacon'
+        });
+        }
     }
-  </script>
+    </script>
 </body>
 </html>
